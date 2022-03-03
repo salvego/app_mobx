@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+import 'package:mobx_base/controllers/login_controller.dart';
 import 'package:mobx_base/widgets/custom_icon_button.dart';
 import 'package:mobx_base/widgets/custom_text_field.dart';
 
@@ -13,6 +16,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  LoginController controller = LoginController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,22 +48,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     hint: 'E-mail',
                     prefix: const Icon(Icons.account_circle),
                     textInputType: TextInputType.emailAddress,
-                    onChanged: (email) {},
+                    onChanged: controller.setEmail,
                     enabled: true,
                   ),
                   const SizedBox(height: 16),
-                  CustomTextField(
-                    hint: 'Senha',
-                    prefix: const Icon(Icons.lock),
-                    obscure: true,
-                    onChanged: (pass) {},
-                    enabled: true,
-                    suffix: CustomIconButton(
-                      radius: 32,
-                      iconData: Icons.visibility,
-                      onTap: () {},
-                    ),
-                  ),
+                  Observer(builder: (_){
+                    return CustomTextField(
+                      hint: 'Senha',
+                      prefix: const Icon(Icons.lock),
+                      obscure: !controller.passwordVisible,
+                      onChanged: controller.setPassword,
+                      enabled: true,
+                      suffix: CustomIconButton(
+                        radius: 32,
+                        iconData: controller.passwordVisible ? Icons.visibility_off : Icons.visibility,
+                        onTap: controller.togglePasswordVisible,
+                      ),
+                    );
+                  }),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
