@@ -15,9 +15,13 @@ abstract class ListControllerBase with Store {
   @computed
   bool get isFormValid => listItem.isNotEmpty;
 
+  @computed
   VoidCallback? get addTodoPressed => isFormValid ? addTodo : null;
 
+  ObservableList<String> todoList = ObservableList<String>();
+
+  @action
   void addTodo() {
-    print(listItem);
+    todoList.insert(0, listItem);
   }
 }

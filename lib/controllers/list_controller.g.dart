@@ -16,6 +16,13 @@ mixin _$ListController on ListControllerBase, Store {
       (_$isFormValidComputed ??= Computed<bool>(() => super.isFormValid,
               name: 'ListControllerBase.isFormValid'))
           .value;
+  Computed<VoidCallback?>? _$addTodoPressedComputed;
+
+  @override
+  VoidCallback? get addTodoPressed => (_$addTodoPressedComputed ??=
+          Computed<VoidCallback?>(() => super.addTodoPressed,
+              name: 'ListControllerBase.addTodoPressed'))
+      .value;
 
   final _$listItemAtom = Atom(name: 'ListControllerBase.listItem');
 
@@ -47,10 +54,22 @@ mixin _$ListController on ListControllerBase, Store {
   }
 
   @override
+  void addTodo() {
+    final _$actionInfo = _$ListControllerBaseActionController.startAction(
+        name: 'ListControllerBase.addTodo');
+    try {
+      return super.addTodo();
+    } finally {
+      _$ListControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 listItem: ${listItem},
-isFormValid: ${isFormValid}
+isFormValid: ${isFormValid},
+addTodoPressed: ${addTodoPressed}
     ''';
   }
 }

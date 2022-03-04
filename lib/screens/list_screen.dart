@@ -14,7 +14,6 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-
   final ListController controller = ListController();
 
   @override
@@ -60,7 +59,7 @@ class _ListScreenState extends State<ListScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: <Widget>[
-                        Observer(builder: (_){
+                        Observer(builder: (_) {
                           return CustomTextField(
                             hint: 'Tarefa',
                             onChanged: controller.setListItem,
@@ -74,21 +73,22 @@ class _ListScreenState extends State<ListScreen> {
                         const SizedBox(
                           height: 8,
                         ),
-                        Expanded(
-                          child: ListView.separated(
-                            itemCount: 10,
-                            itemBuilder: (_, index) {
-                              return ListTile(
-                                title: Text(
-                                  'Item $index',
-                                ),
-                                onTap: () {},
-                              );
-                            },
-                            separatorBuilder: (_, __) {
-                              return const Divider();
-                            },
-                          ),
+                        Expanded(child: Observer(builder: (_) {
+                          return ListView.separated(
+                              itemCount: controller.todoList.length,
+                              itemBuilder: (_, index) {
+                                return ListTile(
+                                  title: Text(
+                                    controller.todoList[index],
+                                  ),
+                                  onTap: () {},
+                                );
+                              },
+                              separatorBuilder: (_, __) {
+                                return const Divider();
+                              },
+                            );
+                          }),
                         ),
                       ],
                     ),
