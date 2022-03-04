@@ -6,12 +6,7 @@ part 'login_controller.g.dart';
 class LoginController = LoginControllerBase with _$LoginController;
 
 abstract class LoginControllerBase with Store {
-  LoginControllerBase() {
-    autorun((_) {
-      print(isFormValid);
-    });
-  }
-
+  
   @observable
   String email = '';
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx_base/controllers/list_controller.dart';
 import 'package:mobx_base/widgets/custom_icon_button.dart';
 import 'package:mobx_base/widgets/custom_text_field.dart';
 
@@ -13,6 +15,8 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
 
+  final ListController controller = ListController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,7 +27,8 @@ class _ListScreenState extends State<ListScreen> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 2),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -32,16 +37,14 @@ class _ListScreenState extends State<ListScreen> {
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w900,
-                          fontSize: 32
-                      ),
+                          fontSize: 32),
                     ),
                     IconButton(
                       icon: const Icon(Icons.exit_to_app),
                       color: Colors.white,
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) => const LoginScreen())
-                        );
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (_) => const LoginScreen()));
                       },
                     ),
                   ],
@@ -57,34 +60,32 @@ class _ListScreenState extends State<ListScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: <Widget>[
-                        CustomTextField(
-                          hint: 'Tarefa',
-                          onChanged: (todo) {
-
-                          },
-                          suffix: CustomIconButton(
-                            radius: 32,
-                            iconData: Icons.add,
-                            onTap: (){
-
-                            },
-                          ),
+                        Observer(builder: (_){
+                          return CustomTextField(
+                            hint: 'Tarefa',
+                            onChanged: controller.setListItem,
+                            suffix: CustomIconButton(
+                              radius: 32,
+                              iconData: Icons.add,
+                              onTap: controller.addTodoPressed,
+                            ),
+                          );
+                        }),
+                        const SizedBox(
+                          height: 8,
                         ),
-                        const SizedBox(height: 8,),
                         Expanded(
                           child: ListView.separated(
                             itemCount: 10,
-                            itemBuilder: (_, index){
+                            itemBuilder: (_, index) {
                               return ListTile(
                                 title: Text(
                                   'Item $index',
                                 ),
-                                onTap: (){
-
-                                },
+                                onTap: () {},
                               );
                             },
-                            separatorBuilder: (_, __){
+                            separatorBuilder: (_, __) {
                               return const Divider();
                             },
                           ),
