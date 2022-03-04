@@ -17,7 +17,22 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-  LoginController controller = LoginController();
+  final LoginController controller = LoginController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    when((_) => controller.loggedIn, (){
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const ListScreen()),
+        );   
+
+    });
+
+  }  
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +59,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  CustomTextField(
-                    hint: 'E-mail',
-                    prefix: const Icon(Icons.account_circle),
-                    textInputType: TextInputType.emailAddress,
-                    onChanged: controller.setEmail,
-                    enabled: true,
-                  ),
+                  Observer(builder: (_){
+                    return CustomTextField(
+                      hint: 'E-mail',
+                      prefix: const Icon(Icons.account_circle),
+                      textInputType: TextInputType.emailAddress,
+                      onChanged: controller.setEmail,
+                      enabled: !controller.loading,
+                    );
+                  }),
                   const SizedBox(height: 16),
                   Observer(builder: (_){
                     return CustomTextField(
@@ -58,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       prefix: const Icon(Icons.lock),
                       obscure: !controller.passwordVisible,
                       onChanged: controller.setPassword,
-                      enabled: true,
+                      enabled: !controller.loading,
                       suffix: CustomIconButton(
                         radius: 32,
                         iconData: controller.passwordVisible ? Icons.visibility_off : Icons.visibility,
@@ -67,22 +84,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   }),
                   const SizedBox(height: 16),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32),
+                  Observer(builder: (_){
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32),
+                        ),
+                        primary: Theme.of(context).primaryColor,
+                        textStyle: const TextStyle(color: Colors.white),
+                        padding: const EdgeInsets.all(12),
                       ),
-                      primary: Theme.of(context).primaryColor,
-                      textStyle: const TextStyle(color: Colors.white),
-                      padding: const EdgeInsets.all(12),
-                    ),
-                    child: const Text('Login'),
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => const ListScreen()),
-                      );
-                    },
-                  )
+                      child: controller.loading 
+                            ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(Colors.white),
+                              ),
+                            ) 
+                            : const Text('Login'),
+                      onPressed: controller.isFormValid ? () {
+                        controller.login();
+                      } : null,
+                    );
+                  })
                 ],
               ),
             ),

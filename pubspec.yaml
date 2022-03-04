@@ -18,6 +18,7 @@ dependencies:
   cupertino_icons: ^1.0.4
   mobx: ^2.0.6+1
   flutter_mobx: ^2.0.4
+  email_validator: ^2.0.1
 
 dev_dependencies:
   flutter_test:

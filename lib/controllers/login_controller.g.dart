@@ -9,6 +9,28 @@ part of 'login_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$LoginController on LoginControllerBase, Store {
+  Computed<bool>? _$isEmailValidComputed;
+
+  @override
+  bool get isEmailValid =>
+      (_$isEmailValidComputed ??= Computed<bool>(() => super.isEmailValid,
+              name: 'LoginControllerBase.isEmailValid'))
+          .value;
+  Computed<bool>? _$isPasswordValidComputed;
+
+  @override
+  bool get isPasswordValid =>
+      (_$isPasswordValidComputed ??= Computed<bool>(() => super.isPasswordValid,
+              name: 'LoginControllerBase.isPasswordValid'))
+          .value;
+  Computed<bool>? _$isFormValidComputed;
+
+  @override
+  bool get isFormValid =>
+      (_$isFormValidComputed ??= Computed<bool>(() => super.isFormValid,
+              name: 'LoginControllerBase.isFormValid'))
+          .value;
+
   final _$emailAtom = Atom(name: 'LoginControllerBase.email');
 
   @override
@@ -55,6 +77,43 @@ mixin _$LoginController on LoginControllerBase, Store {
     });
   }
 
+  final _$loadingAtom = Atom(name: 'LoginControllerBase.loading');
+
+  @override
+  bool get loading {
+    _$loadingAtom.reportRead();
+    return super.loading;
+  }
+
+  @override
+  set loading(bool value) {
+    _$loadingAtom.reportWrite(value, super.loading, () {
+      super.loading = value;
+    });
+  }
+
+  final _$loggedInAtom = Atom(name: 'LoginControllerBase.loggedIn');
+
+  @override
+  bool get loggedIn {
+    _$loggedInAtom.reportRead();
+    return super.loggedIn;
+  }
+
+  @override
+  set loggedIn(bool value) {
+    _$loggedInAtom.reportWrite(value, super.loggedIn, () {
+      super.loggedIn = value;
+    });
+  }
+
+  final _$loginAsyncAction = AsyncAction('LoginControllerBase.login');
+
+  @override
+  Future<void> login() {
+    return _$loginAsyncAction.run(() => super.login());
+  }
+
   final _$LoginControllerBaseActionController =
       ActionController(name: 'LoginControllerBase');
 
@@ -96,7 +155,12 @@ mixin _$LoginController on LoginControllerBase, Store {
     return '''
 email: ${email},
 password: ${password},
-passwordVisible: ${passwordVisible}
+passwordVisible: ${passwordVisible},
+loading: ${loading},
+loggedIn: ${loggedIn},
+isEmailValid: ${isEmailValid},
+isPasswordValid: ${isPasswordValid},
+isFormValid: ${isFormValid}
     ''';
   }
 }
