@@ -61,6 +61,7 @@ class _ListScreenState extends State<ListScreen> {
                       children: <Widget>[
                         Observer(builder: (_) {
                           return CustomTextField(
+                            controller: controller.addTodoController,
                             hint: 'Tarefa',
                             onChanged: controller.setListItem,
                             suffix: CustomIconButton(
@@ -77,12 +78,21 @@ class _ListScreenState extends State<ListScreen> {
                           return ListView.separated(
                               itemCount: controller.todoList.length,
                               itemBuilder: (_, index) {
-                                return ListTile(
-                                  title: Text(
-                                    controller.todoList[index],
-                                  ),
-                                  onTap: () {},
-                                );
+
+                                final todo = controller.todoList[index];
+
+                                return Observer(builder: (_){
+                                  return ListTile(
+                                    title: Text(
+                                      todo.title,
+                                      style: TextStyle(
+                                        color: todo.done ? Colors.greenAccent 
+                                                        : Colors.black
+                                      ),
+                                    ),
+                                    onTap: todo.toggleDone,
+                                  );
+                                });
                               },
                               separatorBuilder: (_, __) {
                                 return const Divider();

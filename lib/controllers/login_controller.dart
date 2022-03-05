@@ -45,7 +45,7 @@ abstract class LoginControllerBase with Store {
 
     loading = true;
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
 
     loading = false;
     loggedIn = true;
